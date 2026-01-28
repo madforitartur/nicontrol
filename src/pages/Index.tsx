@@ -1,13 +1,80 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import { AppLayout } from '@/components/layout/AppLayout';
+import { Dashboard } from '@/components/dashboard/Dashboard';
+import { OrdersPage } from '@/components/orders/OrdersPage';
+import { ImportPage } from '@/components/import/ImportPage';
+import { ReportsPage } from '@/components/reports/ReportsPage';
+import { useOrders } from '@/hooks/useOrders';
 
 const Index = () => {
+  const [currentPage, setCurrentPage] = useState('dashboard');
+  const {
+    orders,
+    filteredOrders,
+    filters,
+    setFilters,
+    searchTerm,
+    setSearchTerm,
+    clients,
+    families,
+    kpiData,
+    sectorStats,
+    clientStats,
+    getOrderStatus,
+  } = useOrders();
+
+  const delayedCount = orders.filter(o => getOrderStatus(o) === 'atrasada').length;
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'dashboard':
+        return (
+          <Dashboard
+            kpiData={kpiData}
+            sectorStats={sectorStats}
+            clientStats={clientStats}
+            orders={orders}
+            getOrderStatus={getOrderStatus}
+          />
+        );
+      case 'orders':
+        return (
+          <OrdersPage
+            orders={filteredOrders}
+            filters={filters}
+            setFilters={setFilters}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            clients={clients}
+            families={families}
+            getOrderStatus={getOrderStatus}
+          />
+        );
+      case 'import':
+        return <ImportPage />;
+      case 'reports':
+        return <ReportsPage />;
+      default:
+        return (
+          <Dashboard
+            kpiData={kpiData}
+            sectorStats={sectorStats}
+            clientStats={clientStats}
+            orders={orders}
+            getOrderStatus={getOrderStatus}
+          />
+        );
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <AppLayout 
+      currentPage={currentPage} 
+      onPageChange={setCurrentPage}
+      alertCount={delayedCount}
+    >
+      {renderPage()}
+    </AppLayout>
   );
 };
 

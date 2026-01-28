@@ -13,6 +13,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -57,11 +60,46 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Status colors
+        status: {
+          success: "hsl(var(--status-success))",
+          "success-light": "hsl(var(--status-success-light))",
+          warning: "hsl(var(--status-warning))",
+          "warning-light": "hsl(var(--status-warning-light))",
+          danger: "hsl(var(--status-danger))",
+          "danger-light": "hsl(var(--status-danger-light))",
+          info: "hsl(var(--status-info))",
+          "info-light": "hsl(var(--status-info-light))",
+          neutral: "hsl(var(--status-neutral))",
+          "neutral-light": "hsl(var(--status-neutral-light))",
+        },
+        // Sector colors
+        sector: {
+          tecelagem: "hsl(var(--sector-tecelagem))",
+          felpo: "hsl(var(--sector-felpo))",
+          tinturaria: "hsl(var(--sector-tinturaria))",
+          confeccao: "hsl(var(--sector-confeccao))",
+          embalagem: "hsl(var(--sector-embalagem))",
+          stock: "hsl(var(--sector-stock))",
+        },
+        // Chart colors
+        chart: {
+          1: "hsl(var(--chart-1))",
+          2: "hsl(var(--chart-2))",
+          3: "hsl(var(--chart-3))",
+          4: "hsl(var(--chart-4))",
+          5: "hsl(var(--chart-5))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      boxShadow: {
+        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
+        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
+        'elevated': '0 10px 40px -10px rgba(0, 0, 0, 0.15)',
       },
       keyframes: {
         "accordion-down": {
@@ -80,10 +118,19 @@ export default {
             height: "0",
           },
         },
+        "pulse-soft": {
+          "0%, 100%": {
+            opacity: "1",
+          },
+          "50%": {
+            opacity: "0.7",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "pulse-soft": "pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
     },
   },

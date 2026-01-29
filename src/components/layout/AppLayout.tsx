@@ -9,7 +9,8 @@ import {
   Menu,
   X,
   ChevronLeft,
-  Factory
+  Factory,
+  GanttChart
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -25,6 +26,7 @@ interface AppLayoutProps {
 const navItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'orders', label: 'Encomendas', icon: Package },
+  { id: 'timeline', label: 'Timeline', icon: GanttChart },
   { id: 'reports', label: 'Relatórios', icon: FileBarChart },
   { id: 'import', label: 'Importar', icon: Upload },
 ];

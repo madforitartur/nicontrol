@@ -4,7 +4,7 @@ import { Dashboard } from '@/components/dashboard/Dashboard';
 import { OrdersPage } from '@/components/orders/OrdersPage';
 import { ImportPage } from '@/components/import/ImportPage';
 import { ReportsPage } from '@/components/reports/ReportsPage';
-import { useOrders } from '@/hooks/useOrders';
+import { useOrdersContext } from '@/contexts/OrdersContext';
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -21,7 +21,7 @@ const Index = () => {
     sectorStats,
     clientStats,
     getOrderStatus,
-  } = useOrders();
+  } = useOrdersContext();
 
   const delayedCount = orders.filter(o => getOrderStatus(o) === 'atrasada').length;
 

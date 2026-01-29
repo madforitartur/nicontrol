@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Dashboard } from '@/components/dashboard/Dashboard';
 import { OrdersPage } from '@/components/orders/OrdersPage';
+import { TimelinePage } from '@/components/timeline/TimelinePage';
 import { ImportPage } from '@/components/import/ImportPage';
 import { ReportsPage } from '@/components/reports/ReportsPage';
 import { useOrdersContext } from '@/contexts/OrdersContext';
@@ -50,6 +51,8 @@ const Index = () => {
             getOrderStatus={getOrderStatus}
           />
         );
+      case 'timeline':
+        return <TimelinePage />;
       case 'import':
         return <ImportPage />;
       case 'reports':

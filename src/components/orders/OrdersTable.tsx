@@ -61,7 +61,7 @@ export const OrdersTable = ({ orders, getOrderStatus, onViewOrder }: OrdersTable
           comparison = a.nrDocumento.localeCompare(b.nrDocumento);
           break;
         case 'terceiro':
-          comparison = a.terceiro.localeCompare(b.terceiro);
+          comparison = a.cliente.localeCompare(b.cliente);
           break;
         case 'dataPedida':
           const dateA = parseDate(a.dataPedida);
@@ -173,7 +173,7 @@ export const OrdersTable = ({ orders, getOrderStatus, onViewOrder }: OrdersTable
                   onClick={() => onViewOrder(order)}
                 >
                   <TableCell className="font-medium">{order.nrDocumento}</TableCell>
-                  <TableCell className="font-medium">{order.terceiro}</TableCell>
+                  <TableCell className="font-medium">{order.cliente}</TableCell>
                   <TableCell className="hidden md:table-cell text-muted-foreground text-sm max-w-[200px] truncate">
                     {order.referencia}
                   </TableCell>

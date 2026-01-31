@@ -5,7 +5,7 @@ export const mockOrders: Order[] = [
   {
     id: "1",
     nrDocumento: "520-2025001258",
-    terceiro: "ACL IMPE",
+    cliente: "ACL IMPE",
     dataEmissao: "25/11/2025",
     dataPedida: "16/01/2026",
     item: 1,
@@ -42,7 +42,7 @@ export const mockOrders: Order[] = [
   {
     id: "2",
     nrDocumento: "520-2025001258",
-    terceiro: "ACL IMPE",
+    cliente: "ACL IMPE",
     dataEmissao: "25/11/2025",
     dataPedida: "16/01/2026",
     item: 2,
@@ -79,7 +79,7 @@ export const mockOrders: Order[] = [
   {
     id: "3",
     nrDocumento: "520-2025001299",
-    terceiro: "TORCEX -",
+    cliente: "TORCEX -",
     dataEmissao: "29/12/2025",
     dataPedida: "13/03/2026",
     item: 1,
@@ -116,7 +116,7 @@ export const mockOrders: Order[] = [
   {
     id: "4",
     nrDocumento: "520-2026000003",
-    terceiro: "NATURAPU",
+    cliente: "NATURAPU",
     dataEmissao: "05/01/2026",
     dataPedida: "06/03/2026",
     item: 3,
@@ -153,7 +153,7 @@ export const mockOrders: Order[] = [
   {
     id: "5",
     nrDocumento: "520-2026000004",
-    terceiro: "CIFRÕES",
+    cliente: "CIFRÕES",
     dataEmissao: "05/01/2026",
     dataPedida: "10/04/2026",
     item: 7,
@@ -190,7 +190,7 @@ export const mockOrders: Order[] = [
   {
     id: "6",
     nrDocumento: "520-2026000008",
-    terceiro: "KROMA -",
+    cliente: "KROMA -",
     dataEmissao: "06/01/2026",
     dataPedida: "13/03/2026",
     item: 5,
@@ -227,7 +227,7 @@ export const mockOrders: Order[] = [
   {
     id: "7",
     nrDocumento: "520-2026000007",
-    terceiro: "CIFRÕES",
+    cliente: "CIFRÕES",
     dataEmissao: "06/01/2026",
     dataPedida: "10/04/2026",
     item: 6,
@@ -264,7 +264,7 @@ export const mockOrders: Order[] = [
   {
     id: "8",
     nrDocumento: "520-2026000015",
-    terceiro: "MARIETTA",
+    cliente: "MARIETTA",
     dataEmissao: "10/01/2026",
     dataPedida: "28/02/2026",
     item: 1,
@@ -301,7 +301,7 @@ export const mockOrders: Order[] = [
   {
     id: "9",
     nrDocumento: "520-2026000020",
-    terceiro: "TEXTIL LDA",
+    cliente: "TEXTIL LDA",
     dataEmissao: "12/01/2026",
     dataPedida: "15/02/2026",
     item: 1,
@@ -338,7 +338,7 @@ export const mockOrders: Order[] = [
   {
     id: "10",
     nrDocumento: "520-2026000025",
-    terceiro: "ACL IMPE",
+    cliente: "ACL IMPE",
     dataEmissao: "15/01/2026",
     dataPedida: "20/01/2026",
     item: 1,
@@ -376,7 +376,7 @@ export const mockOrders: Order[] = [
 
 // Helper to get unique clients
 export const getUniqueClients = (orders: Order[]): string[] => {
-  return [...new Set(orders.map(o => o.terceiro))].sort();
+  return [...new Set(orders.map(o => o.cliente))].sort();
 };
 
 // Helper to get unique families

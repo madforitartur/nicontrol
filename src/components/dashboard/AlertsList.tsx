@@ -41,7 +41,7 @@ export const AlertsList = ({ delayedOrders, limit = 5 }: AlertsListProps) => {
               <div className="flex items-center gap-2">
                 <span className="font-medium text-foreground truncate">{order.nrDocumento}</span>
               </div>
-              <p className="text-sm text-muted-foreground truncate">{order.terceiro}</p>
+              <p className="text-sm text-muted-foreground truncate">{order.cliente}</p>
               <div className="flex items-center gap-1 mt-1 text-xs text-status-danger">
                 <Clock className="h-3 w-3" />
                 <span>Prazo: {order.dataPedida}</span>

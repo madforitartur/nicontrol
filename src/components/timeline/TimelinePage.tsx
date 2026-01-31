@@ -45,7 +45,7 @@ export const TimelinePage = () => {
     let filtered = orders.filter(o => o.emAberto > 0); // Only active orders
     
     if (selectedClient !== 'all') {
-      filtered = filtered.filter(o => o.terceiro === selectedClient);
+      filtered = filtered.filter(o => o.cliente === selectedClient);
     }
     
     return filtered.slice(0, 50); // Limit for performance
@@ -294,7 +294,7 @@ export const TimelinePage = () => {
                         )}
                       </div>
                       <span className="text-xs text-muted-foreground truncate">
-                        {order.terceiro} • {order.referencia}
+                        {order.cliente} • {order.referencia}
                       </span>
                     </div>
                   );
@@ -397,7 +397,7 @@ export const TimelinePage = () => {
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">
-              {new Set(filteredOrders.map(o => o.terceiro)).size}
+              {new Set(filteredOrders.map(o => o.cliente)).size}
             </div>
             <div className="text-sm text-muted-foreground">Clientes</div>
           </CardContent>

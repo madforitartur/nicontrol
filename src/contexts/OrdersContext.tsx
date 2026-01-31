@@ -100,14 +100,14 @@ export const OrdersProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         const term = searchTerm.toLowerCase();
         const searchMatch =
           order.nrDocumento.toLowerCase().includes(term) ||
-          order.terceiro.toLowerCase().includes(term) ||
+          order.cliente.toLowerCase().includes(term) ||
           order.po.toLowerCase().includes(term) ||
           order.referencia.toLowerCase().includes(term);
         if (!searchMatch) return false;
       }
 
       // Client filter
-      if (filters.cliente && order.terceiro !== filters.cliente) return false;
+      if (filters.cliente && order.cliente !== filters.cliente) return false;
 
       // Document number filter
       if (filters.nrDocumento && !order.nrDocumento.includes(filters.nrDocumento)) return false;
@@ -240,14 +240,14 @@ export const OrdersProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const statsMap = new Map<string, ClientStats>();
 
     orders.forEach(order => {
-      const existing = statsMap.get(order.terceiro);
+      const existing = statsMap.get(order.cliente);
       if (existing) {
         existing.totalEncomendas++;
         existing.quantidadeTotal += order.qtdPedida;
         existing.emAberto += order.emAberto;
       } else {
-        statsMap.set(order.terceiro, {
-          cliente: order.terceiro,
+        statsMap.set(order.cliente, {
+          cliente: order.cliente,
           totalEncomendas: 1,
           quantidadeTotal: order.qtdPedida,
           emAberto: order.emAberto,

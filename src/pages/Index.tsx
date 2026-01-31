@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { Dashboard } from '@/components/dashboard/Dashboard';
 import { OrdersPage } from '@/components/orders/OrdersPage';
@@ -26,6 +26,37 @@ const Index = () => {
 
   const delayedCount = orders.filter(o => getOrderStatus(o) === 'atrasada').length;
 
+  const validPages = useMemo(
+    () => new Set(['dashboard', 'encomendas', 'timeline', 'reports', 'import']),
+    []
+  );
+
+  const normalizePage = (page: string) => {
+    if (page === 'orders') return 'encomendas';
+    if (page === 'gantt') return 'timeline';
+    return validPages.has(page) ? page : 'dashboard';
+  };
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hashValue = window.location.hash.replace('#', '');
+      setCurrentPage(normalizePage(hashValue));
+    };
+
+    handleHashChange();
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, [validPages]);
+
+  const handlePageChange = (page: string) => {
+    const normalized = normalizePage(page);
+    setCurrentPage(normalized);
+    const nextHash = `#${normalized}`;
+    if (window.location.hash !== nextHash) {
+      window.location.hash = normalized;
+    }
+  };
+
   const renderPage = () => {
     switch (currentPage) {
       case 'dashboard':
@@ -38,7 +69,7 @@ const Index = () => {
             getOrderStatus={getOrderStatus}
           />
         );
-      case 'orders':
+      case 'encomendas':
         return (
           <OrdersPage
             orders={filteredOrders}
@@ -73,7 +104,7 @@ const Index = () => {
   return (
     <AppLayout 
       currentPage={currentPage} 
-      onPageChange={setCurrentPage}
+      onPageChange={handlePageChange}
       alertCount={delayedCount}
     >
       {renderPage()}

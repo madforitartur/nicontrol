@@ -13,6 +13,7 @@ import { SectorChart } from './SectorChart';
 import { ClientsChart } from './ClientsChart';
 import { AlertsList } from './AlertsList';
 import { KPIData, SectorStats, ClientStats, Order, OrderStatus } from '@/types/orders';
+import { EmptyState } from '@/components/empty/EmptyState';
 
 interface DashboardProps {
   kpiData: KPIData;
@@ -31,11 +32,22 @@ export const Dashboard = ({
 }: DashboardProps) => {
   const delayedOrders = orders.filter(o => getOrderStatus(o) === 'atrasada');
 
+  if (orders.length === 0) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <EmptyState
+          title="Sem dados carregados"
+          description="Importe o seu ficheiro Excel para começar a acompanhar as encomendas em tempo real."
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Page Header */}
       <div className="flex flex-col gap-1">
-        <h2 className="text-2xl font-bold text-foreground">Visão Geral</h2>
+        <h2 className="text-2xl font-bold text-foreground">Dashboard</h2>
         <p className="text-muted-foreground">Acompanhamento de produção em tempo real</p>
       </div>
 

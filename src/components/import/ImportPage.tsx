@@ -1,6 +1,6 @@
-import { Upload, FileSpreadsheet, CheckCircle, AlertCircle, Clock, Loader2, AlertTriangle, XCircle } from 'lucide-react';
+import { FileSpreadsheet, CheckCircle, AlertCircle, Loader2, AlertTriangle, XCircle, Database } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCallback, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Progress } from '@/components/ui/progress';
@@ -23,7 +23,7 @@ export const ImportPage = () => {
   const [parseResult, setParseResult] = useState<ParseResult | null>(null);
   const [progress, setProgress] = useState(0);
   
-  const { importOrders, importHistory } = useOrdersContext();
+  const { importOrders, importHistory, orders } = useOrdersContext();
 
   const handleDrag = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -173,34 +173,26 @@ export const ImportPage = () => {
 
   return (
     <div className="space-y-6">
-      {/* Page Header */}
       <div>
         <h2 className="text-2xl font-bold text-foreground">Importar Dados</h2>
         <p className="text-muted-foreground">
-          Carregue ficheiros Excel exportados do sistema externo
+          Carregue o seu ficheiro Excel com a base de dados de encomendas
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Upload Area */}
-        <Card>
+      <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
+        <Card className="shadow-card">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Upload className="h-5 w-5" />
-              Carregar Ficheiro
-            </CardTitle>
-            <CardDescription>
-              Arraste um ficheiro Excel (.xls ou .xlsx) ou clique para seleccionar
-            </CardDescription>
+            <CardTitle>Carregar Ficheiro</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
             <div
               className={cn(
-                "border-2 border-dashed rounded-xl p-8 text-center transition-colors",
-                dragActive 
-                  ? "border-accent bg-accent/5" 
-                  : "border-muted-foreground/25 hover:border-accent/50",
-                uploadedFile && importState === 'idle' && "border-primary bg-primary/5",
+                "border-2 border-dashed rounded-xl p-8 text-center transition-colors bg-muted/10",
+                dragActive
+                  ? "border-blue-400 bg-blue-50/40"
+                  : "border-blue-300/70",
+                uploadedFile && importState === 'idle' && "border-blue-500/80",
                 importState === 'success' && "border-status-success bg-status-success/10",
                 importState === 'error' && "border-status-danger bg-status-danger/10"
               )}
@@ -211,7 +203,7 @@ export const ImportPage = () => {
             >
               {importState === 'validating' || importState === 'parsing' ? (
                 <div className="space-y-4">
-                  <Loader2 className="h-12 w-12 mx-auto text-accent animate-spin" />
+                  <Loader2 className="h-12 w-12 mx-auto text-blue-600 animate-spin" />
                   <div>
                     <p className="font-medium text-foreground">
                       {importState === 'validating' ? 'A validar ficheiro...' : 'A processar dados...'}
@@ -255,7 +247,7 @@ export const ImportPage = () => {
                 </div>
               ) : uploadedFile ? (
                 <div className="space-y-3">
-                  <FileSpreadsheet className="h-12 w-12 mx-auto text-primary" />
+                  <FileSpreadsheet className="h-12 w-12 mx-auto text-blue-600" />
                   <div>
                     <p className="font-medium text-foreground">{uploadedFile.name}</p>
                     <p className="text-sm text-muted-foreground">
@@ -266,8 +258,8 @@ export const ImportPage = () => {
                     <Button variant="outline" onClick={resetImport}>
                       Cancelar
                     </Button>
-                    <Button 
-                      className="bg-accent text-accent-foreground hover:bg-accent/90"
+                    <Button
+                      className="bg-blue-600 text-white hover:bg-blue-700"
                       onClick={handleImport}
                     >
                       Importar Dados
@@ -278,8 +270,10 @@ export const ImportPage = () => {
                 <div className="space-y-3">
                   <FileSpreadsheet className="h-12 w-12 mx-auto text-muted-foreground" />
                   <div>
-                    <p className="font-medium text-foreground">Arraste o ficheiro aqui</p>
-                    <p className="text-sm text-muted-foreground">ou clique para seleccionar</p>
+                    <p className="font-medium text-foreground">Arraste o ficheiro Excel aqui</p>
+                    <p className="text-sm text-muted-foreground">
+                      ou clique para selecionar (.xlsx, .xls)
+                    </p>
                   </div>
                   <label>
                     <input
@@ -288,17 +282,16 @@ export const ImportPage = () => {
                       className="hidden"
                       onChange={handleFileChange}
                     />
-                    <Button variant="outline" className="cursor-pointer" asChild>
-                      <span>Seleccionar Ficheiro</span>
+                    <Button variant="secondary" className="cursor-pointer" asChild>
+                      <span>Selecionar Ficheiro</span>
                     </Button>
                   </label>
                 </div>
               )}
             </div>
 
-            {/* Validation Errors */}
             {parseResult?.errors && parseResult.errors.length > 0 && importState === 'success' && (
-              <div className="mt-4 p-4 bg-status-warning/10 rounded-lg border border-status-warning/30">
+              <div className="p-4 bg-status-warning/10 rounded-lg border border-status-warning/30">
                 <h4 className="font-medium text-status-warning mb-2 flex items-center gap-2">
                   <AlertTriangle className="h-4 w-4" />
                   Linhas com erros ({parseResult.errors.length})
@@ -307,74 +300,44 @@ export const ImportPage = () => {
               </div>
             )}
 
-            {/* Warnings */}
-            {parseResult?.warnings && parseResult.warnings.length > 0 && (
-              <div className="mt-4 p-4 bg-status-info/10 rounded-lg border border-status-info/30">
-                <h4 className="font-medium text-status-info mb-2">Avisos</h4>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  {parseResult.warnings.map((warning, idx) => (
-                    <li key={idx}>• {warning}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Info Box */}
-            <div className="mt-4 p-4 bg-muted/50 rounded-lg">
-              <h4 className="font-medium text-foreground mb-2">Formato do Ficheiro</h4>
-              <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• Formato: Excel (.xls ou .xlsx)</li>
-                <li>• Codificação: ISO-8859-1</li>
-                <li>• A primeira linha deve conter os cabeçalhos</li>
-                <li>• Campos obrigatórios: Nr.Documento, Terceiro, Qtd Pedida</li>
-              </ul>
+            <div className="bg-muted/40 rounded-lg p-4 text-sm text-muted-foreground space-y-1">
+              <p className="font-medium text-foreground">Estrutura esperada:</p>
+              <p><strong>Coluna A:</strong> Notas de instruções</p>
+              <p><strong>Coluna B:</strong> Nome do cliente</p>
+              <p><strong>Coluna D:</strong> Data de entrega</p>
+              <p><strong>Coluna H:</strong> Referência do artigo</p>
+              <p><strong>Coluna J:</strong> Cor do artigo</p>
+              <p><strong>Coluna M:</strong> Descrição do artigo</p>
+              <p><strong>Coluna O:</strong> Quantidades pedidas</p>
+              <p><strong>Colunas Q-AA:</strong> Posição nos setores</p>
             </div>
           </CardContent>
         </Card>
 
-        {/* Import History */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="h-5 w-5" />
-              Histórico de Importações
-            </CardTitle>
-            <CardDescription>
-              Últimas importações realizadas
-            </CardDescription>
+        <Card className="shadow-card h-fit">
+          <CardHeader className="flex flex-row items-center gap-2">
+            <Database className="h-5 w-5 text-blue-600" />
+            <CardTitle>Estado dos Dados</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {importHistory.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-8">
-                  Nenhuma importação realizada
+          <CardContent className="text-sm text-muted-foreground space-y-3">
+            {orders.length === 0 ? (
+              <p>Nenhum dado carregado. Importe um ficheiro Excel para começar.</p>
+            ) : (
+              <>
+                <p className="text-foreground font-medium">
+                  Dados carregados com sucesso.
                 </p>
-              ) : (
-                importHistory.map((item) => (
-                  <div 
-                    key={item.id}
-                    className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
-                  >
-                    <div className="flex items-center gap-3">
-                      {getStatusIcon(item.status)}
-                      <div>
-                        <p className="font-medium text-sm">{item.filename}</p>
-                        <p className="text-xs text-muted-foreground">{item.date}</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-semibold text-sm">{item.records.toLocaleString('pt-PT')}</p>
-                      <p className="text-xs text-muted-foreground">
-                        registos
-                        {item.errors && item.errors > 0 && (
-                          <span className="text-status-warning ml-1">({item.errors} erros)</span>
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
+                <p>
+                  {importHistory[0]
+                    ? `Última importação: ${importHistory[0].filename} (${importHistory[0].date})`
+                    : 'Dados disponíveis.'}
+                </p>
+                <div className="flex items-center gap-2">
+                  {importHistory[0] && getStatusIcon(importHistory[0].status)}
+                  <span>{orders.length.toLocaleString('pt-PT')} registos carregados</span>
+                </div>
+              </>
+            )}
           </CardContent>
         </Card>
       </div>

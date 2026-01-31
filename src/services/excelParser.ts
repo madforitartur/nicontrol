@@ -20,7 +20,7 @@ export interface ValidationError {
 // Column mapping from Excel headers to Order properties
 const COLUMN_MAPPING: Record<string, keyof Order> = {
   'Nr.Documento': 'nrDocumento',
-  'Terceiro': 'terceiro',
+  'Cliente': 'cliente',
   'Data Emissão': 'dataEmissao',
   'Data Pedida': 'dataPedida',
   'Item': 'item',
@@ -55,7 +55,7 @@ const COLUMN_MAPPING: Record<string, keyof Order> = {
 };
 
 // Required fields that must have values
-const REQUIRED_FIELDS: (keyof Order)[] = ['nrDocumento', 'terceiro', 'qtdPedida'];
+const REQUIRED_FIELDS: (keyof Order)[] = ['nrDocumento', 'cliente', 'qtdPedida'];
 
 // Numeric fields that should be parsed as numbers
 const NUMERIC_FIELDS: (keyof Order)[] = [

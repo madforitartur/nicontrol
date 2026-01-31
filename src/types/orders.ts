@@ -3,7 +3,7 @@
 export interface Order {
   id: string;
   nrDocumento: string;
-  terceiro: string;
+  cliente: string;
   dataEmissao: string;
   dataPedida: string;
   item: number;

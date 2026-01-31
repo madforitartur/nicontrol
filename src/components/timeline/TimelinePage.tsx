@@ -12,11 +12,11 @@ import {
   Filter,
   RotateCcw
 } from 'lucide-react';
-import { Order, OrderStatus, SECTORS } from '@/types/orders';
 import { cn } from '@/lib/utils';
 import { useOrdersContext } from '@/contexts/OrdersContext';
 import { TimelineRow } from './TimelineRow';
 import { TimelineLegend } from './TimelineLegend';
+import { EmptyState } from '@/components/empty/EmptyState';
 
 // Parse DD/MM/YYYY format
 const parseDate = (dateStr: string): Date | null => {
@@ -177,12 +177,23 @@ export const TimelinePage = () => {
     return groups;
   }, [dateColumns, zoomLevel]);
 
+  if (orders.length === 0) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <EmptyState
+          title="Sem dados para mostrar"
+          description="Importe o seu ficheiro Excel para ver a timeline de entregas."
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">Timeline de Produção</h2>
+          <h2 className="text-2xl font-bold text-foreground">Timeline</h2>
           <p className="text-muted-foreground">
             Visualização temporal do fluxo de encomendas por sector
           </p>

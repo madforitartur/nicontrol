@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { 
   LayoutDashboard, 
   Package, 
-  FileBarChart, 
   Settings, 
   Upload,
   Bell,
@@ -10,7 +9,8 @@ import {
   X,
   ChevronLeft,
   Factory,
-  GanttChart
+  Calendar,
+  FileText
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -25,9 +25,9 @@ interface AppLayoutProps {
 
 const navItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'orders', label: 'Encomendas', icon: Package },
-  { id: 'timeline', label: 'Timeline', icon: GanttChart },
-  { id: 'reports', label: 'Relatórios', icon: FileBarChart },
+  { id: 'encomendas', label: 'Encomendas', icon: Package },
+  { id: 'timeline', label: 'Timeline', icon: Calendar },
+  { id: 'reports', label: 'Relatórios', icon: FileText },
   { id: 'import', label: 'Importar', icon: Upload },
 ];
 
@@ -49,7 +49,9 @@ export const AppLayout = ({ children, currentPage, onPageChange, alertCount = 0 
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
           <div className="flex items-center gap-2">
-            <Factory className="h-6 w-6 text-sidebar-primary" />
+            <div className="h-9 w-9 rounded-lg bg-sidebar-primary text-sidebar-primary-foreground flex items-center justify-center">
+              <Factory className="h-5 w-5" />
+            </div>
             <span className="font-semibold text-sidebar-foreground">OrderFlow</span>
           </div>
         </div>
@@ -82,7 +84,9 @@ export const AppLayout = ({ children, currentPage, onPageChange, alertCount = 0 
         {/* Logo */}
         <div className="h-16 flex items-center justify-between px-4 border-b border-sidebar-border">
           <div className={cn("flex items-center gap-3", !sidebarOpen && "justify-center w-full")}>
-            <Factory className="h-8 w-8 text-sidebar-primary flex-shrink-0" />
+            <div className="h-10 w-10 rounded-lg bg-sidebar-primary text-sidebar-primary-foreground flex items-center justify-center flex-shrink-0">
+              <Factory className="h-5 w-5" />
+            </div>
             {sidebarOpen && (
               <span className="font-bold text-xl text-sidebar-foreground">OrderFlow</span>
             )}

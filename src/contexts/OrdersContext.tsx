@@ -1,6 +1,9 @@
-import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
 import { Order, OrderFilter, KPIData, SectorStats, ClientStats, OrderStatus, SECTORS } from '@/types/orders';
-import { mockOrders, getUniqueClients, getUniqueFamilies } from '@/data/mockOrders';
+import { getUniqueClients, getUniqueFamilies } from '@/data/mockOrders';
+
+const ORDERS_STORAGE_KEY = 'orderflow.orders';
+const HISTORY_STORAGE_KEY = 'orderflow.importHistory';
 
 // Parse DD/MM/YYYY format
 const parseDate = (dateStr: string): Date | null => {
@@ -57,15 +60,37 @@ interface OrdersContextType {
 const OrdersContext = createContext<OrdersContextType | undefined>(undefined);
 
 export const OrdersProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [orders, setOrders] = useState<Order[]>(mockOrders);
+  const [orders, setOrders] = useState<Order[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const stored = window.localStorage.getItem(ORDERS_STORAGE_KEY);
+      return stored ? (JSON.parse(stored) as Order[]) : [];
+    } catch {
+      return [];
+    }
+  });
   const [filters, setFilters] = useState<OrderFilter>({});
   const [searchTerm, setSearchTerm] = useState('');
-  const [importHistory, setImportHistory] = useState<ImportHistoryItem[]>([
-    { id: '1', filename: 'listagem_20260127.xls', date: '27/01/2026 09:15', records: 3245, status: 'success' },
-    { id: '2', filename: 'listagem_20260126.xls', date: '26/01/2026 08:45', records: 3198, status: 'success' },
-    { id: '3', filename: 'listagem_20260125.xls', date: '25/01/2026 09:00', records: 3156, status: 'success' },
-  ]);
+  const [importHistory, setImportHistory] = useState<ImportHistoryItem[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const stored = window.localStorage.getItem(HISTORY_STORAGE_KEY);
+      return stored ? (JSON.parse(stored) as ImportHistoryItem[]) : [];
+    } catch {
+      return [];
+    }
+  });
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
+  }, [orders]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(importHistory));
+  }, [importHistory]);
 
   const importOrders = useCallback((newOrders: Order[], filename: string, errors?: number) => {
     setIsLoading(true);

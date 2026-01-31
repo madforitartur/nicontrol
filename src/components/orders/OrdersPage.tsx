@@ -3,8 +3,9 @@ import { Order, OrderFilter, OrderStatus } from '@/types/orders';
 import { OrderFilters } from './OrderFilters';
 import { OrdersTable } from './OrdersTable';
 import { OrderDetailModal } from './OrderDetailModal';
-import { Download, FileSpreadsheet } from 'lucide-react';
+import { FileSpreadsheet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { EmptyState } from '@/components/empty/EmptyState';
 
 interface OrdersPageProps {
   orders: Order[];
@@ -34,6 +35,17 @@ export const OrdersPage = ({
     setSelectedOrder(order);
     setDetailOpen(true);
   };
+
+  if (orders.length === 0) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <EmptyState
+          title="Nenhuma encomenda carregada"
+          description="Importe o seu ficheiro Excel para ver as encomendas."
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

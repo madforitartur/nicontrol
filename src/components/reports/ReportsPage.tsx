@@ -1,8 +1,11 @@
 import { FileText, Download, Calendar, Users, Package, TrendingUp } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useOrdersContext } from '@/contexts/OrdersContext';
+import { EmptyState } from '@/components/empty/EmptyState';
 
 export const ReportsPage = () => {
+  const { orders } = useOrdersContext();
   const reports = [
     {
       id: 'cliente',
@@ -33,6 +36,17 @@ export const ReportsPage = () => {
       color: 'bg-emerald-100 text-emerald-600',
     },
   ];
+
+  if (orders.length === 0) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <EmptyState
+          title="Sem dados para relatórios"
+          description="Importe o seu ficheiro Excel para gerar relatórios."
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
